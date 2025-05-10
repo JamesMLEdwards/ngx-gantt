@@ -124,23 +124,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         setTimeout(() => this.ganttComponent.scrollToDate(1627729997), 200);
     }
 
-    barClick(event: GanttBarClickEvent) {
-        this.thyNotify.info('Event: barClick', `你点击了 [${event.item.title}]`);
-    }
-
-    lineClick(event: GanttLineClickEvent) {
-        this.thyNotify.info('Event: lineClick', `你点击了 ${event.source.title} 到 ${event.target.title} 的关联线`);
-    }
-
     dragMoved(event: GanttDragEvent) {}
 
     dragEnded(event: GanttDragEvent) {
-        this.thyNotify.info('Event: dragEnded', `修改了 [${event.item.title}] 的时间`);
         this.items = [...this.items];
-    }
-
-    itemClick(event: GanttTableItemClickEvent) {
-        console.log(`点击了数据行 ${event.current.id}`);
     }
 
     selectedChange(event: GanttSelectedEvent) {
