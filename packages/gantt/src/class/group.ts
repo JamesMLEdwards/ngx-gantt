@@ -1,4 +1,4 @@
-import { GanttItemInternal } from './item';
+import { GanttItemInternal, GanttItemType } from './item';
 
 export interface GanttGroup<T = unknown> {
     id: string;
@@ -6,6 +6,7 @@ export interface GanttGroup<T = unknown> {
     expanded?: boolean;
     origin?: T;
     class?: string;
+    type?: GanttItemType;
 }
 
 export class GanttGroupInternal {
@@ -15,6 +16,7 @@ export class GanttGroupInternal {
     items: GanttItemInternal[];
     mergedItems: GanttItemInternal[][];
     expanded?: boolean;
+    laneStyle?: Partial<CSSStyleDeclaration>;
     refs?: {
         height?: number;
     } = {};

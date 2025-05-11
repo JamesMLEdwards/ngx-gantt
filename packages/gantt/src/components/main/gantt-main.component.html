@@ -1,46 +1,66 @@
 <gantt-links-overlay [flatItems]="flatItems" (lineClick)="lineClick.emit($event)"></gantt-links-overlay>
 <div class="gantt-main-groups" [style.width.px]="ganttUpper.view.width">
-  @for (group of viewportItems; track trackBy($index, group)) {
-    @if (group | isGanttGroup) {
-      <div class="gantt-group" [style.height.px]="ganttUpper.styles.lineHeight" [ngClass]="group.class">
-        <ng-template [ngTemplateOutlet]="groupHeaderTemplate" [ngTemplateOutletContext]="{ group: group }"></ng-template>
-        <div class="gantt-group-items">
-          <div class="gantt-group-row" [style.height.px]="ganttUpper.styles.lineHeight">
-            @for (item of group.items; track trackBy($index, item)) {
-              <gantt-bar [item]="item" [template]="barTemplate" (barClick)="barClick.emit($event)"></gantt-bar>
+  @for (data of viewportItems; track trackBy($index, data)) {
+    @if (data | isGanttGroup) {
+      <div
+        class="gantt-group"
+        [style]="data.laneStyle"
+        [style.height.px]="ganttUpper.styles.lineHeight"
+        [ngClass]="data.class"
+        [class.gantt-main-item-active]="ganttUpper.isSelected(data.id)"
+      >
+        <ng-template [ngTemplateOutlet]="groupHeaderTemplate" [ngTemplateOutletContext]="{ group: data }"></ng-template>
+        <div
+          class="gantt-item"
+          [style.height.px]="ganttUpper.styles.lineHeight"
+          [style]="data.laneStyle"
+          [class.gantt-main-item-active]="ganttUpper.isSelected(data.id)"
+        >
+          @for (item of data.items; track trackBy($index, item)) {
+            <gantt-bar [item]="item"></gantt-bar>
+          }
+
+          <div
+            class="gantt-item"
+            [style.height.px]="ganttUpper.styles.lineHeight"
+            [style]="data.laneStyle"
+            [class.gantt-main-item-active]="ganttUpper.isSelected(data.id)"
+          >
+            @for (item of data.items; track trackBy($index, item)) {
+              @for (item of item.children; track trackBy($index, item)) {
+                <gantt-bar [item]="item"></gantt-bar>
+              }
             }
           </div>
         </div>
       </div>
     }
-    @if (!(group | isGanttGroup)) {
+    @if (!(data | isGanttGroup)) {
       <div
         class="gantt-item"
         [style.height.px]="ganttUpper.styles.lineHeight"
-        [style]="group.laneStyle"
-        [class.gantt-main-item-active]="ganttUpper.isSelected(group.id)"
+        [style]="data.laneStyle"
+        [class.gantt-main-item-active]="ganttUpper.isSelected(data.id)"
       >
-        @if (group.type | isGanttCustomItem) {
+        @if (data.type | isGanttCustomItem) {
           <ng-template
             [ngTemplateOutlet]="itemTemplate"
             [ngTemplateOutletContext]="{
-              item: group.origin,
-              refs: group.refs,
-              baseline: ganttUpper.baselineItemsMap[group.id]?.origin,
-              baselineRefs: ganttUpper.baselineItemsMap[group.id]?.refs
+              item: data.origin,
+              refs: data.refs,
+              baseline: ganttUpper.baselineItemsMap[data.id]?.origin,
+              baselineRefs: ganttUpper.baselineItemsMap[data.id]?.refs
             }"
           >
           </ng-template>
         }
-        @if ((group.type | isGanttRangeItem) || (group.type | isGanttBarItem)) {
-          @if (group.type | isGanttRangeItem) {
-            <gantt-range [template]="rangeTemplate" [item]="group"></gantt-range>
+        @if ((data.type | isGanttRangeItem) || (data.type | isGanttBarItem)) {
+          @if (data.type | isGanttRangeItem) {
+            <gantt-range [template]="rangeTemplate" [item]="data"></gantt-range>
           }
-          @if (group.type | isGanttBarItem) {
-            <gantt-bar [item]="group" [template]="barTemplate" (barClick)="barClick.emit($event)"></gantt-bar>
-          }
-          @if (ganttUpper.baselineItemsMap[group.id]) {
-            <gantt-baseline [baselineItem]="ganttUpper.baselineItemsMap[group.id]" [template]="baselineTemplate"></gantt-baseline>
+
+          @if (ganttUpper.baselineItemsMap[data.id]) {
+            <gantt-baseline [baselineItem]="ganttUpper.baselineItemsMap[data.id]" [template]="baselineTemplate"></gantt-baseline>
           }
         }
       </div>

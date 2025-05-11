@@ -55,9 +55,29 @@ export class AppGanttGroupsExampleComponent implements OnInit {
             { id: '000002', title: 'Group-2' }
         ];
         this.items = [
-            { id: '000000', title: 'Task 0', start: 1627729997, end: 1628421197, group_id: '000000' },
+            {
+                id: '000000',
+                title: 'Task 0',
+                group_id: '000000',
+                expanded: true,
+                children: [
+                    { id: '0-0', title: 'test', start: 1628423200, end: 1629429000 },
+                    { id: '0-1', title: 'test-1', start: 1630423200, end: 1631429000 }
+                ]
+            },
             { id: '000001', title: 'Task 1', start: 1617361997, end: 1625483597, group_id: '000000' },
-            { id: '000002', title: 'Task 2', start: 1628421197, end: 1628421197, group_id: '000001' },
+            {
+                id: '000002',
+                title: 'Task 2',
+                start: 1628421197,
+                end: 1628421197,
+                group_id: '000001',
+                expanded: true,
+                children: [
+                    { id: '1-0', title: 'test', start: 1628423200, end: 1629429000 },
+                    { id: '1-1', title: 'test-1', start: 1630423200, end: 1631429000 }
+                ]
+            },
             { id: '000003', title: 'Task 3', start: 1628421197, end: 1628421197, group_id: '000001' },
             { id: '000004', title: 'Task 4', start: 1628421197, end: 1628421197, group_id: '000002' },
             { id: '000005', title: 'Task 5', start: 1628421197, end: 1628421197, group_id: '000002' }
