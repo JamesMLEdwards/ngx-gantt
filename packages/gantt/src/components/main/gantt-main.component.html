@@ -2,8 +2,34 @@
 <div class="gantt-main-groups" [style.width.px]="ganttUpper.view.width">
   @for (data of viewportItems; track trackBy($index, data)) {
     @if (data | isGanttGroup) {
-      <div class="gantt-group" [style.height.px]="ganttUpper.styles.lineHeight" [ngClass]="data.class">
+      <div
+        class="gantt-group"
+        [style.height.px]="ganttUpper.styles.lineHeight"
+        [ngClass]="data.class"
+        [class.gantt-main-item-active]="ganttUpper.isSelected(data.id)"
+      >
         <ng-template [ngTemplateOutlet]="groupHeaderTemplate" [ngTemplateOutletContext]="{ group: data }"></ng-template>
+        <div
+          class="gantt-item"
+          [style.height.px]="ganttUpper.styles.lineHeight"
+          [class.gantt-main-item-active]="ganttUpper.isSelected(data.id)"
+        >
+          @for (item of data.items; track trackBy($index, item)) {
+            <gantt-bar [item]="item"></gantt-bar>
+          }
+
+          <div
+            class="gantt-item"
+            [style.height.px]="ganttUpper.styles.lineHeight"
+            [class.gantt-main-item-active]="ganttUpper.isSelected(data.id)"
+          >
+            @for (item of data.items; track trackBy($index, item)) {
+              @for (item of item.children; track trackBy($index, item)) {
+                <gantt-bar [item]="item"></gantt-bar>
+              }
+            }
+          </div>
+        </div>
       </div>
     }
     @if (!(data | isGanttGroup)) {
@@ -29,9 +55,7 @@
           @if (data.type | isGanttRangeItem) {
             <gantt-range [template]="rangeTemplate" [item]="data"></gantt-range>
           }
-          @if (data.type | isGanttBarItem) {
-            <gantt-bar [item]="data" [template]="barTemplate" (barClick)="barClick.emit($event)"></gantt-bar>
-          }
+
           @if (ganttUpper.baselineItemsMap[data.id]) {
             <gantt-baseline [baselineItem]="ganttUpper.baselineItemsMap[data.id]" [template]="baselineTemplate"></gantt-baseline>
           }
