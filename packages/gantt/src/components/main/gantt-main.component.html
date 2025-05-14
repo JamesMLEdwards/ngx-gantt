@@ -28,7 +28,7 @@
           >
             @for (item of data.items; track trackBy($index, item)) {
               @for (item of item.children; track trackBy($index, item)) {
-                <gantt-bar [item]="item"></gantt-bar>
+                <ngx-gantt-bar [item]="item"></ngx-gantt-bar>
               }
             }
           </div>
