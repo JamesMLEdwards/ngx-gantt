@@ -14,6 +14,7 @@
 </div>
 <div class="gantt-bar-border"></div>
 <div #content class="gantt-bar-content" (click)="onBarClick($event)">
+  <span style="color: #fff">&nbsp;&nbsp;{{ item.origin.title }}</span>
   @if (item.progress >= 0) {
     <div class="gantt-bar-content-progress" [style.width.%]="item.progress * 100"></div>
   }
